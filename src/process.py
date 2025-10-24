@@ -17,6 +17,7 @@ from src.tokenizer import JiebaTokenizer
 
 def build_dataset(sentences,tokenizer):
     """
+
     :param sentences:
     :param tokenizer:
     :return:[{'input':[1,2,3,4,5],'target':5},{'input':[2,3,4,5,6],'target':7}]
@@ -24,7 +25,8 @@ def build_dataset(sentences,tokenizer):
     index_sentences = [tokenizer.encode(sentence) for sentence in sentences] #遍历返回每个句子的index:[[12,36,0],]
     dataset = []
     for sentence in tqdm(index_sentences,desc="generate dataset"):
-        for i in range(len(sentence)-config.SEQ_LEN):
+        #len(sentence)-config.SEQ_LEN决定了一个sentence生成多少个dataset
+        for i in range(len(sentence)-config.SEQ_LEN): #低于SEQ_LEN的不会进入循环，当然短句也可以 padding
             input = sentence[i:i+config.SEQ_LEN] # {'input':[1,2,3,4,5],'target':6}
             target = sentence[i+config.SEQ_LEN]
             dataset.append({'input':input,'target':target})
@@ -44,7 +46,7 @@ def process():
         # print(dialog) #dialog为一个list
         for sentence in dialog: #遍历每个dialog list :['user1':xxx,'user2':xxx]
             # print(sentence)
-            sentences.append(sentence.split('：')[1]) #用中文的：
+            sentences.append(sentence.split('：')[1]) #用中文的：[，，]
     print(sentences[0])
     print("sentences:",len(sentences))
 
